@@ -64,7 +64,7 @@ p10accuBoxLegend <- p10accuBoxLegend + labs(y="Accuracy Ratio", x = "") +
 p10accuViolinLegend <- ggplot(df10accu) + 
   geom_violin(aes(x = model, y = accuratio, fill = model)) +
   scale_fill_manual("Model", values = legendColors)
-p10accuViolinLegend <- p100accuViolinLegend + labs(y="Accuracy Ratio", x = "Model") +
+p10accuViolinLegend <- p10accuViolinLegend + labs(y="Accuracy Ratio", x = "Model") +
   theme(axis.title.x = element_blank(),
         axis.title.y = element_text(size = 12), 
         axis.text.x = element_blank(),

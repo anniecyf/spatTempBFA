@@ -5,7 +5,7 @@ Version: 1.0
 Date: 2023-11-30
 Author: Yifan Cheng 
 Maintainer: Yifan Cheng <annieffcheng@gmail.com>
-Description: This repository implements practicable Bayesian nonparametric factor analysis models capable of tackling moderately large spatiotemporal data along with subsequent vital inferential tasks including spatial and temporal prediction as well as spatial clustering of temporal trends. Details pertaining to our models are in a manuscript by Cheng and Li (2023) `<arXiv:1111.11111>`
+Description: This repository implements practicable Bayesian nonparametric factor analysis models capable of tackling moderately large spatiotemporal data along with subsequent vital inferential tasks including spatial and temporal prediction as well as spatial clustering of temporal trends. Details pertaining to our models are in a manuscript by Cheng and Li (2023) `<arXiv:2312.05802>`
 License: GPL (>= 2)
 Encoding: UTF-8
 LazyData: true

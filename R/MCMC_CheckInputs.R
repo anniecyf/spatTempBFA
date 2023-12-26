@@ -666,7 +666,7 @@ VAR1CheckInputsFixedL <- function(formula, data, dist, Nu, K, L, starting, hyper
   ###hypers
   if (!is.null(hypers)) {
     if (!is.list(hypers)) stop('hypers must be a list')
-    if (!all(names(hypers) %in% c("Sigma2", "Kappa", "Rho", "Delta", "Beta", "Upsilon"))) stop('hypers: Can only contain lists with names "Sigma2", "Kappa", "Rho", "Delta", "Beta", or "Upsilon"')
+    if (!all(names(hypers) %in% c("Sigma2", "Kappa", "Rho", "Delta", "Beta", "Upsilon", "A"))) stop('hypers: Can only contain lists with names "Sigma2", "Kappa", "Rho", "Delta", "Beta", "Upsilon", or "A"')
     
     ###If Sigma2 hyperparameters are provided
     if ("Sigma2" %in% names(hypers)) {
@@ -798,6 +798,35 @@ VAR1CheckInputsFixedL <- function(formula, data, dist, Nu, K, L, starting, hyper
       }
     }
     
+    ###If A hyperparameters are provided
+    if ("A" %in% names(hypers)) {
+      if (!is.list(hypers$A)) stop('hypers: "A" must be a list')
+      if (!"V" %in% names(hypers$A)) stop('hypers: "V" value missing')
+      if (!"Mvec" %in% names(hypers$A)) stop('hypers: "Mvec" value missing')
+      if (K > 1) {
+        if (!is.matrix(hypers$A$V)) stop('hypers: "V" must be a matrix')
+        if (nrow(hypers$A$V) != K) stop('hypers: "V" must be K dimensional')
+        if (any(is.na(hypers$A$V))) stop('hypers: "V" cannot have missing values')
+        if (!all(is.finite(hypers$A$V))) stop('hypers: "V" cannot have infinite values')
+        if (ncol(hypers$A$V) != K) stop('hypers: "V" must be square')
+        if ( any( (hypers$A$V) != t(hypers$A$V) ) ) stop('hypers: "V" must be symmetric')
+        if ((det(hypers$A$V) - 0) < 0.00001) stop('hypers: "V" is close to singular')
+        if (!is.matrix(hypers$A$Mvec) | dim(hypers$A$Mvec)[2] != 1) stop('hypers: "Mvec" must be a matrix of dimension K^2 x 1')
+        if (nrow(hypers$A$Mvec) != K^2) stop('hypers: "Mvec" must be of dimension K^2 x 1')
+        if (any(is.na(hypers$A$Mvec))) stop('hypers: "Mvec" cannot have missing values')
+        if (!all(is.finite(hypers$A$Mvec))) stop('hypers: "Mvec" cannot have infinite values')
+      } else { #if (K == 1) 
+        if (!is.scalar(hypers$A$V)) stop('hypers: "V" must be a scalar when K = 1')
+        if (is.na(hypers$A$V)) stop('hypers: "V" cannot be NA')
+        if (!is.finite(hypers$A$V)) stop('hypers: "V" cannot be infinite')
+        if (hypers$A$V <= 0) stop('hypers: "V" must be strictly positive')
+        if (!is.scalar(hypers$A$Mvec)) stop('hypers: "Mvec" must be a scalar when K = 1')
+        if (is.na(hypers$A$Mvec)) stop('hypers: "Mvec" cannot be NA')
+        if (!is.finite(hypers$A$Mvec)) stop('hypers: "Mvec" cannot be infinite')
+        if (hypers$A$Mvec <= 0) stop('hypers: "Mvec" must be strictly positive')
+      }
+    }
+
     ###End Hyperparameters
   }
   
@@ -1635,7 +1664,7 @@ VAR1CheckInputsVaryingLjs <- function(formula, data, dist, Nu, K, LjVec, startin
   ###hypers
   if (!is.null(hypers)) {
   if (!is.list(hypers)) stop('hypers must be a list')
-  if (!all(names(hypers) %in% c("Sigma2", "Kappa", "Rho", "Delta", "Beta", "Upsilon"))) stop('hypers: Can only contain lists with names "Sigma2", "Kappa", "Rho", "Delta", "Beta", or "Upsilon"')
+  if (!all(names(hypers) %in% c("Sigma2", "Kappa", "Rho", "Delta", "Beta", "Upsilon", "A"))) stop('hypers: Can only contain lists with names "Sigma2", "Kappa", "Rho", "Delta", "Beta", "Upsilon", or "A"')
   
   ###If Sigma2 hyperparameters are provided
   if ("Sigma2" %in% names(hypers)) {
@@ -1766,6 +1795,35 @@ VAR1CheckInputsVaryingLjs <- function(formula, data, dist, Nu, K, LjVec, startin
     }
   }
   
+  ###If A hyperparameters are provided
+    if ("A" %in% names(hypers)) {
+      if (!is.list(hypers$A)) stop('hypers: "A" must be a list')
+      if (!"V" %in% names(hypers$A)) stop('hypers: "V" value missing')
+      if (!"Mvec" %in% names(hypers$A)) stop('hypers: "Mvec" value missing')
+      if (K > 1) {
+        if (!is.matrix(hypers$A$V)) stop('hypers: "V" must be a matrix')
+        if (nrow(hypers$A$V) != K) stop('hypers: "V" must be K dimensional')
+        if (any(is.na(hypers$A$V))) stop('hypers: "V" cannot have missing values')
+        if (!all(is.finite(hypers$A$V))) stop('hypers: "V" cannot have infinite values')
+        if (ncol(hypers$A$V) != K) stop('hypers: "V" must be square')
+        if ( any( (hypers$A$V) != t(hypers$A$V) ) ) stop('hypers: "V" must be symmetric')
+        if ((det(hypers$A$V) - 0) < 0.00001) stop('hypers: "V" is close to singular')
+        if (!is.matrix(hypers$A$Mvec) | dim(hypers$A$Mvec)[2] != 1) stop('hypers: "Mvec" must be a matrix of dimension K^2 x 1')
+        if (nrow(hypers$A$Mvec) != K^2) stop('hypers: "Mvec" must be of dimension K^2 x 1')
+        if (any(is.na(hypers$A$Mvec))) stop('hypers: "Mvec" cannot have missing values')
+        if (!all(is.finite(hypers$A$Mvec))) stop('hypers: "Mvec" cannot have infinite values')
+      } else { #if (K == 1) 
+        if (!is.scalar(hypers$A$V)) stop('hypers: "V" must be a scalar when K = 1')
+        if (is.na(hypers$A$V)) stop('hypers: "V" cannot be NA')
+        if (!is.finite(hypers$A$V)) stop('hypers: "V" cannot be infinite')
+        if (hypers$A$V <= 0) stop('hypers: "V" must be strictly positive')
+        if (!is.scalar(hypers$A$Mvec)) stop('hypers: "Mvec" must be a scalar when K = 1')
+        if (is.na(hypers$A$Mvec)) stop('hypers: "Mvec" cannot be NA')
+        if (!is.finite(hypers$A$Mvec)) stop('hypers: "Mvec" cannot be infinite')
+        if (hypers$A$Mvec <= 0) stop('hypers: "Mvec" must be strictly positive')
+      }
+    }
+
   ###End Hyperparameters
 }
 
